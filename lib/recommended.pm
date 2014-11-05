@@ -9,7 +9,7 @@ use version;
 use Carp            ();
 use Module::Runtime ();
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 # $MODULES{$type}{$caller}{$mod} = [$min_version, $satisfied]
 my %MODULES;
