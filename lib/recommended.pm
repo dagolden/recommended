@@ -6,8 +6,8 @@ package recommended;
 # ABSTRACT: Load a recommended module and don't die if it doesn't exist
 
 use version;
-use Carp            ();
-use Module::Runtime ();
+use Carp ();
+use Module::Runtime 0.014 (); # bugfixes for use_package_optimistically
 
 our $VERSION = '0.002';
 
@@ -55,14 +55,16 @@ sub has {
         $ver = $spec->[0];
     }
 
-    local $@;
-    my $ok = eval { Module::Runtime::use_module( $mod, $ver ) };
+    # don't call with a version; we want this to die only on compile failure
+    Module::Runtime::use_package_optimistically($mod);
+
+    my $ok = $INC{ Module::Runtime::module_notional_filename($mod) }
+      && $mod->VERSION >= version->new($ver);
+
     return $spec->[1] = $ok ? 1 : 0;
 }
 
 1;
-
-=for Pod::Coverage has
 
 =head1 SYNOPSIS
 
@@ -91,9 +93,14 @@ This module tries to load recommended modules of particular minimum versions
 and provides means to check if they are loaded.  It is a thin veneer around
 L<Module::Runtime>.
 
-The major benefit over using L<Module::Runtime> directly is that this allows
-you to self-document your recommended modules at the top of your code, while
-still loading them on demand elsewhere.
+There are two major benefits over using L<Module::Runtime> directly:
+
+=for :list
+* Self-documenting recommended modules together with versions at the top of your
+  code, while still loading them on demand elsewhere.
+* Loading is fatal if a recommended module exists but fails to compile, but not
+  fatal if the module is missing or the version is insufficient.  This is not
+  something that L<Module::Runtime> offers in a single subroutine.
 
 =head1 USAGE
 
@@ -123,7 +130,10 @@ requirement and returns true if the following conditions are met:
 * the module can be loaded
 * the module meets the default or alternate minimum version
 
-Otherwise, it returns false.
+Otherwise, it returns false.  If the module exists but fails to compile, an
+error is thrown.  This avoids some edge-cases where things are left in an
+incomplete state or subsequent normal loads of the module by other packages get
+a misleading error.
 
 The module is loaded without invoking the module's C<import> method, as running
 import on an optional module at runtime is just weird.
