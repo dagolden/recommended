@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package suggested;
-# ABSTRACT: Load a suggested module and don't die if it doesn't exist
+# ABSTRACT: Load suggested modules on demand when available
 
 require recommended;
 

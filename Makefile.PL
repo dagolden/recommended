@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.17;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "Load a recommended module and don't die if it doesn't exist",
+  "ABSTRACT" => "Load recommended modules on demand when available",
   "AUTHOR" => "David Golden <dagolden\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.17"

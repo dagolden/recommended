@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package recommended;
-# ABSTRACT: Load a recommended module and don't die if it doesn't exist
+# ABSTRACT: Load recommended modules on demand when available
 
 use version;
 use Carp ();
@@ -89,17 +89,17 @@ sub has {
 
 =head1 DESCRIPTION
 
-This module tries to load recommended modules of particular minimum versions
-and provides means to check if they are loaded.  It is a thin veneer around
+This module gathers a list of recommended modules and versions and provides
+means to check if they are available.  It is a thin veneer around
 L<Module::Runtime>.
 
 There are two major benefits over using L<Module::Runtime> directly:
 
 =for :list
-* Self-documenting recommended modules together with versions at the top of your
+* Self-documents recommended modules together with versions at the top of your
   code, while still loading them on demand elsewhere.
-* Loading is fatal if a recommended module exists but fails to compile, but not
-  fatal if the module is missing or the version is insufficient.  This is not
+* Dies if a recommended module exists but fails to compile, but doesn't die
+  if the module is missing or the version is insufficient.  This is not
   something that L<Module::Runtime> offers in a single subroutine.
 
 =head1 USAGE
@@ -126,7 +126,7 @@ The C<has> method takes a module name and optional alternative minimum version
 requirement and returns true if the following conditions are met:
 
 =for :list
-* the module was recommended (via C<use recommended>)
+* the module was recommended in the current package (via C<use recommended>)
 * the module can be loaded
 * the module meets the default or alternate minimum version
 
