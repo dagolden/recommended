@@ -8,7 +8,7 @@ package suggested;
 require recommended;
 
 our @ISA     = qw/recommended/;
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 1;
 
