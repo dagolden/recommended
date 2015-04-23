@@ -2,6 +2,8 @@ Revision history for recommended
 
 {{$NEXT}}
 
+0.003     2015-04-23 16:39:23-04:00 America/New_York
+
     [Fixes]
 
     - Ensures that has() returns a false value not the empty-list in
