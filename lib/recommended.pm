@@ -43,7 +43,7 @@ sub has {
     my $caller = caller;
     my $spec   = $MODULES{$class}{$caller}{$mod};
 
-    return unless $spec;
+    return 0 unless $spec; # explicit to ensure a value even in list context
 
     if ( defined $ver ) {
         Carp::croak("module '$mod': '$ver' is not a valid version string")

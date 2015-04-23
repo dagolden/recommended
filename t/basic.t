@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 
-plan tests => 12;
+plan tests => 13;
 
 {
 
@@ -52,6 +52,11 @@ plan tests => 12;
         "other package doesn't have recommended Devel::Peek" );
     ok( !suggested->has('File::Copy'),
         "other package doesn't have recommended File::Copy" );
+
+    my $use_if = eval "use if recommended->has('File::Basename'), 'Pod::Usage';";
+    my $err    = $@;
+    ok( !$INC{'Pod/Usage.pm'}, "Pod::Usage not loaded from 'use if ...'" );
+    diag $err if $err;
 }
 
 done_testing;
